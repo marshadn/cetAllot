@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm, FormProvider } from "react-hook-form"; // Import FormProvider
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
@@ -16,46 +16,37 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/Select";
-
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import { toast, ToastContainer } from "react-toastify"; // Fix: Import toast correctly
-import "react-toastify/dist/ReactToastify.css"; // Import toast styles
+// Firebase
+import { db } from "@/firebase";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 
-// Define the Zod schema for validation.
+// Schema
 const FormSchema = z.object({
   adharNumber: z
     .string()
     .length(12, "Adhar number must be exactly 12 digits")
     .regex(/^\d+$/, "Adhar number must be numeric"),
-
   name: z.string().min(2, "Name must be at least 2 characters long"),
-
   email: z.string().email("Invalid email address"),
-
   age: z
     .string()
     .refine((val) => !isNaN(val) && Number(val) >= 18 && Number(val) <= 80, {
       message: "Age must be a number between 18 and 80",
     }),
-
   company: z.string().min(1, "Company is required"),
-
   experience: z.string().min(1, "Experience is required"),
-
   address: z.string().min(1, "Address is required"),
-
   highestEducation: z.string().min(1, "Highest Education is required"),
-
   mark: z.string().min(1, "Mark is required"),
-
   category: z.string().min(1, "Category is required"),
-
   distance: z.string().refine((val) => !isNaN(val) && Number(val) <= 75, {
     message: "Distance must be less than or equal to 75",
   }),
-
   priorityChoices: z
     .object({
       1: z.string().min(1, "Priority choice 1 is required"),
@@ -65,15 +56,12 @@ const FormSchema = z.object({
     .refine(
       (data) => {
         const priorities = [data[1], data[2], data[3]];
-        return new Set(priorities).size === priorities.length; // Check if priorities are unique
+        return new Set(priorities).size === priorities.length;
       },
-      {
-        message: "Priority choices must be unique",
-      }
+      { message: "Priority choices must be unique" }
     ),
 });
 
-// Initial form data.
 const initialFormData = {
   adharNumber: "",
   name: "",
@@ -95,17 +83,29 @@ export default function Apply() {
     defaultValues: initialFormData,
   });
 
-  // Function to handle form submission.
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const confirmed = window.confirm(
       "Are you sure all fields are filled in correctly?"
     );
-    if (!confirmed) {
-      return; // Cancel submission if not confirmed
-    }
+    if (!confirmed) return;
 
-    console.log("Form Data Submitted: ", data);
-    toast.success("Your submission was successful!");
+    try {
+      const formattedData = {
+        ...data,
+        age: Number(data.age),
+        experience: Number(data.experience),
+        mark: Number(data.mark),
+        distance: Number(data.distance),
+        submittedAt: Timestamp.now(),
+      };
+
+      await addDoc(collection(db, "applications"), formattedData);
+      toast.success("Your submission was successful!");
+      form.reset();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Submission failed. Please try again.");
+    }
   };
 
   return (
@@ -114,198 +114,47 @@ export default function Apply() {
         Application Form
       </h1>
 
-      {/* Wrap the form with FormProvider */}
       <FormProvider {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="bg-white p-8 rounded-lg shadow-lg max-w-3xl mx-auto space-y-6"
         >
-          {/* Adhar Number */}
-          <FormField
-            name="adharNumber"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Adhar Number</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter your Adhar Number"
-                    {...field}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  />
-                </FormControl>
-                {fieldState?.error && (
-                  <FormMessage message={fieldState.error.message} />
-                )}
-              </FormItem>
-            )}
-          />
+          {[
+            { name: "adharNumber", label: "Adhar Number", type: "number" },
+            { name: "name", label: "Name" },
+            { name: "email", label: "Email" },
+            { name: "age", label: "Age", type: "number" },
+            { name: "company", label: "Company" },
+            { name: "experience", label: "Experience (in years)", type: "number" },
+            { name: "address", label: "Address" },
+            { name: "highestEducation", label: "Highest Education" },
+            { name: "mark", label: "Mark (in %)", type: "number", step: "0.01" },
+            { name: "distance", label: "Distance (in km)", type: "number" },
+          ].map(({ name, label, type = "text", step }) => (
+            <FormField
+              key={name}
+              name={name}
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>{label}</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type={type}
+                      step={step}
+                      placeholder={`Enter your ${label}`}
+                      className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
+                    />
+                  </FormControl>
+                  {fieldState?.error && (
+                    <FormMessage message={fieldState.error.message} />
+                  )}
+                </FormItem>
+              )}
+            />
+          ))}
 
-          {/* Name */}
-          <FormField
-            name="name"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter your Name"
-                    {...field}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  />
-                </FormControl>
-                {fieldState?.error && (
-                  <FormMessage message={fieldState.error.message} />
-                )}
-              </FormItem>
-            )}
-          />
-
-          {/* Email */}
-          <FormField
-            name="email"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter your Email"
-                    {...field}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  />
-                </FormControl>
-                {fieldState?.error && (
-                  <FormMessage message={fieldState.error.message} />
-                )}
-              </FormItem>
-            )}
-          />
-
-          {/* Age */}
-          <FormField
-            name="age"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Age</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter your Age"
-                    {...field}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  />
-                </FormControl>
-                {fieldState?.error && (
-                  <FormMessage message={fieldState.error.message} />
-                )}
-              </FormItem>
-            )}
-          />
-
-          {/* Company */}
-          <FormField
-            name="company"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Company</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter your Company"
-                    {...field}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  />
-                </FormControl>
-                {fieldState?.error && (
-                  <FormMessage message={fieldState.error.message} />
-                )}
-              </FormItem>
-            )}
-          />
-
-          {/* Experience */}
-          <FormField
-            name="experience"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Experience (in years)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter your Experience"
-                    {...field}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  />
-                </FormControl>
-                {fieldState?.error && (
-                  <FormMessage message={fieldState.error.message} />
-                )}
-              </FormItem>
-            )}
-          />
-
-          {/* Address */}
-          <FormField
-            name="address"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Address</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter your Address"
-                    {...field}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  />
-                </FormControl>
-                {fieldState?.error && (
-                  <FormMessage message={fieldState.error.message} />
-                )}
-              </FormItem>
-            )}
-          />
-
-          {/* Highest Education */}
-          <FormField
-            name="highestEducation"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Highest Education</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter your Highest Education"
-                    {...field}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  />
-                </FormControl>
-                {fieldState?.error && (
-                  <FormMessage message={fieldState.error.message} />
-                )}
-              </FormItem>
-            )}
-          />
-
-          {/* Mark */}
-          <FormField
-            name="mark"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Mark (in %)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="0.01" // Allows decimal values
-                    placeholder="Enter your Mark"
-                    {...field}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  />
-                </FormControl>
-                {fieldState?.error && (
-                  <FormMessage message={fieldState.error.message} />
-                )}
-              </FormItem>
-            )}
-          />
-
-          {/* Category */}
+          {/* Category Dropdown */}
           <FormField
             name="category"
             render={({ field, fieldState }) => (
@@ -317,35 +166,13 @@ export default function Apply() {
                       <SelectValue placeholder="Select your Category" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="SC">SC</SelectItem>
-                      <SelectItem value="ST">ST</SelectItem>
-                      <SelectItem value="OBC">OBC</SelectItem>
-                      <SelectItem value="General">General</SelectItem>
-                      <SelectItem value="OEC">OEC</SelectItem>
-                      <SelectItem value="Others">Others</SelectItem>
+                      {["SC", "ST", "OBC", "General", "OEC", "Others"].map((opt) => (
+                        <SelectItem key={opt} value={opt}>
+                          {opt}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
-                </FormControl>
-                {fieldState?.error && (
-                  <FormMessage message={fieldState.error.message} />
-                )}
-              </FormItem>
-            )}
-          />
-
-          {/* Distance */}
-          <FormField
-            name="distance"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>Distance (in km)</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Enter your Distance"
-                    {...field}
-                    className="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500"
-                  />
                 </FormControl>
                 {fieldState?.error && (
                   <FormMessage message={fieldState.error.message} />
@@ -394,6 +221,7 @@ export default function Apply() {
           </Button>
         </form>
       </FormProvider>
+
       <ToastContainer />
     </div>
   );
