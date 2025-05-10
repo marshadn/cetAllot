@@ -1,11 +1,24 @@
+"use client";
 import { Button } from "@/components/ui/Button";
-import { Bell, Check, LogOut } from "lucide-react";
+import { Check } from "lucide-react";
+import { runAllotmentHandler } from "../utils/runAllotmentHandler";
+import { useState } from "react";
 
-export const DashboardHeader = ({
-  onNewNotice,
-  onPublishAllotments,
-  onLogout,
-}) => {
+export const DashboardHeader = () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleRunAllotment = async () => {
+    setLoading(true);
+    const result = await runAllotmentHandler();
+    setLoading(false);
+
+    if (result.success) {
+      alert("Allotment completed successfully!");
+    } else {
+      alert("Allotment failed. Check console for errors.");
+    }
+  };
+
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
@@ -15,8 +28,9 @@ export const DashboardHeader = ({
         </p>
       </div>
       <div className="flex gap-2">
-        <Button variant="outline" onClick={onPublishAllotments}>
-          <Check className="mr-2 h-4 w-4" /> Publish Allotments
+        <Button variant="outline" onClick={handleRunAllotment} disabled={loading}>
+          <Check className="mr-2 h-4 w-4" />
+          {loading ? "Running..." : "Run Allotment"}
         </Button>
       </div>
     </div>
