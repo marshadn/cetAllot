@@ -254,7 +254,7 @@ export const ApplicationForm = ({ onSuccess }) => {
                     <SelectValue placeholder="Select your category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["SC", "ST", "OBC", "General","Muslim", "OEC","SEBC", "Others"].map((opt) => (
+                    {["EWS","SEBC","Ezhava","Muslim","Other Backward Hindu","Latin Catholic and Anglo Indian","Dheevara","Viswakarma","Kusavan","OBC Christian","Kudumbi","SC", "ST", "Physically Disabled","Transgender", "Sports", "DTE Staff","Central govt. employee", "Others"].map((opt) => (
                       <SelectItem key={opt} value={opt}>
                         {opt}
                       </SelectItem>

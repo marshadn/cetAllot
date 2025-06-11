@@ -130,9 +130,9 @@ export default function PartTimeBtech() {
 
 ) : isPublished ? (
   <div className="space-y-8">
-    <AllottedTable students={allottedData.ce} deptName="CE" />
-    <AllottedTable students={allottedData.ee} deptName="EE" />
-    <AllottedTable students={allottedData.mech} deptName="MECH" />
+    <AllottedTable students={allottedData.ce} deptName="Civil Engineering" />
+    <AllottedTable students={allottedData.ee} deptName="Electrical & Electronics Engineering" />
+    <AllottedTable students={allottedData.mech} deptName="Mechanical Engineering" />
   </div>
 ) : (
   <div className="text-center py-12">

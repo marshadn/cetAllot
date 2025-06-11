@@ -297,7 +297,7 @@ useEffect(() => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  title: "Electronics & Communication Engineering",
+                  title: "Electrical and Electronics Engineering",
                   description:
                     "Focuses on communication systems, signal processing, embedded systems, and VLSI design.",
                   icon: <BookOpen className="h-10 w-10 text-primary" />,

@@ -161,8 +161,8 @@ export const ApplicationTable = ({
  <TableHeader className="bg-primary sticky top-0 z-10 shadow-md">
   <TableRow>
     {[
-      "No.", "Full Name", "Email", "Caste", "Religion", "Category", "Distance (km)",
-      "Score", "Phone", "Priority 1", "Priority 2", "Priority 3", "LET Reg No", "LET Rank", "Actions"
+      "No.", "Full Name", "Caste", "Religion", "Category", "Distance (km)",
+      "Mark", "Phone", "Priority 1", "Priority 2", "Priority 3", "LET Reg No", "LET Rank", "Actions"
     ].map((title, i) => (
       <TableHead
         key={i}
@@ -197,9 +197,6 @@ export const ApplicationTable = ({
   </TableCell>
   <TableCell className="px-4 py-3 border-r border-gray-200">
     {app.name}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.email}
   </TableCell>
   <TableCell className="px-4 py-3 border-r border-gray-200">
     {app.caste}

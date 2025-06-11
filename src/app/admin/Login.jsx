@@ -137,11 +137,11 @@ export default function Login() {
         </CardContent>
 
         <CardFooter className="flex flex-col items-center gap-2">
-          <p className="text-xs text-muted-foreground text-center">
+          {/* <p className="text-xs text-muted-foreground text-center">
             For demo purposes: <br />
             <span className="font-medium">admin12@gmail.com</span> /{" "}
             <span className="font-medium">pass@1234</span>
-          </p>
+          </p> */}
         </CardFooter>
       </Card>
     </div>
