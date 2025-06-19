@@ -142,8 +142,7 @@ useEffect(() => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                Join our community of engineers and innovators. Applications for
-                the 2024-2025 academic year are now open.
+                Join our community of engineers and innovators.
               </motion.p>
 
               <motion.div

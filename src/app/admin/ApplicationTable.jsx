@@ -3,7 +3,7 @@ import {
   collection,
   onSnapshot,
   deleteDoc,
-  doc
+  doc,
 } from "firebase/firestore";
 import { db } from "@/firebase";
 import { Input } from "@/components/ui/Input";
@@ -12,7 +12,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/Select";
 import {
   Table,
@@ -20,7 +20,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/Table";
 import { Button } from "@/components/ui/Button";
 import {
@@ -28,7 +28,7 @@ import {
   Loader2,
   Pencil,
   Trash2,
-  PlusCircle
+  PlusCircle,
 } from "lucide-react";
 import ApplicationModal from "./ApplicationModal";
 import { toast } from "sonner";
@@ -69,6 +69,23 @@ export const ApplicationTable = ({
     } catch (error) {
       console.error("Error deleting application:", error);
       toast.error("Failed to delete application");
+    }
+  };
+
+  const handleClearAll = async () => {
+    if (!window.confirm("Are you sure you want to delete ALL applications? This cannot be undone.")) return;
+
+    try {
+      const batch = [];
+      for (const app of applications) {
+        batch.push(deleteDoc(doc(db, "applications", app.id)));
+      }
+
+      await Promise.all(batch);
+      toast.success("All applications deleted successfully");
+    } catch (error) {
+      console.error("Error deleting all applications:", error);
+      toast.error("Failed to delete all applications");
     }
   };
 
@@ -143,6 +160,17 @@ export const ApplicationTable = ({
             Export
           </Button>
 
+          {/* Clear All Applications */}
+          <Button
+            variant="destructive"
+            className="flex items-center gap-2"
+            onClick={handleClearAll}
+            disabled={isLoading || applications.length === 0}
+          >
+            <Trash2 className="h-5 w-5" />
+            Clear All
+          </Button>
+
           {/* New Application Button */}
           <Button
             className="flex items-center gap-2 bg-primary hover:bg-indigo-700 text-white"
@@ -154,112 +182,94 @@ export const ApplicationTable = ({
         </div>
       </div>
 
-     {/* Table Container */}
-<div className="overflow-x-auto rounded-xl border border-gray-200 shadow-lg">
-  <Table className="min-w-full table-auto">
-    {/* Header */}
- <TableHeader className="bg-primary sticky top-0 z-10 shadow-md">
-  <TableRow>
-    {[
-      "No.", "Full Name", "Caste", "Religion", "Category", "Distance (km)",
-      "Mark", "Phone", "Priority 1", "Priority 2", "Priority 3", "LET Reg No", "LET Rank", "Actions"
-    ].map((title, i) => (
-      <TableHead
-        key={i}
-        className={`px-4 py-3.5 text-left text-sm font-bold text-white uppercase tracking-wider border-r border-indigo-400/50 ${
-          title === "Actions" ? "text-right border-r-0 pr-6" : ""
-        }`}
-      >
-        {title}
-      </TableHead>
-    ))}
-  </TableRow>
-</TableHeader> 
+      {/* Table Container */}
+      <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-lg">
+        <Table className="min-w-full table-auto">
+          <TableHeader className="bg-primary sticky top-0 z-10 shadow-md">
+            <TableRow>
+              {[
+                "No.",
+                "Full Name",
+                "Caste",
+                "Religion",
+                "Category",
+                "Distance (km)",
+                "Mark",
+                "Phone",
+                "Priority 1",
+                "Priority 2",
+                "Priority 3",
+                "LET Reg No",
+                "LET Rank",
+                "Actions",
+              ].map((title, i) => (
+                <TableHead
+                  key={i}
+                  className={`px-4 py-3.5 text-left text-sm font-bold text-white uppercase tracking-wider border-r border-indigo-400/50 ${
+                    title === "Actions" ? "text-right border-r-0 pr-6" : ""
+                  }`}
+                >
+                  {title}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
 
-    {/* Body */}
-    <TableBody className="divide-y divide-gray-100 bg-white text-gray-800 text-sm">
-      {filteredApps.length === 0 && (
-        <TableRow>
-          <TableCell colSpan={16} className="text-center py-6 text-gray-400">
-            No applications found.
-          </TableCell>
-        </TableRow>
-      )}
+          <TableBody className="divide-y divide-gray-100 bg-white text-gray-800 text-sm">
+            {filteredApps.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={16} className="text-center py-6 text-gray-400">
+                  No applications found.
+                </TableCell>
+              </TableRow>
+            )}
 
-      {filteredApps.map((app, index) => (
-        <TableRow
-  key={app.id}
-  className="hover:bg-indigo-50 even:bg-gray-50 transition-colors duration-200"
->
-  {/* All cells except last have right border */}
-  <TableCell className="px-4 py-3 font-medium border-r border-gray-200">
-    {index + 1}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.name}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.caste}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.religion}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.reservationCategory}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.distance}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.mark}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.phone}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.priorityChoices?.[1]}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.priorityChoices?.[2]}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.priorityChoices?.[3]}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.letRegNo}
-  </TableCell>
-  <TableCell className="px-4 py-3 border-r border-gray-200">
-    {app.letRank}
-  </TableCell>
-  
-  {/* Last cell (Actions) has no right border */}
-  <TableCell className="px-4 py-3 text-right">
-    <div className="flex justify-end items-center gap-2">
-      <Button
-        size="sm"
-        variant="outline"
-        className="hover:bg-indigo-100 transition-colors duration-200"
-        onClick={() => onEdit(app)}
-        aria-label={`Edit ${app.name}`}
-      >
-        <Pencil className="w-4 h-4 text-indigo-600" />
-      </Button>
-      <Button
-        size="sm"
-        variant="destructive"
-        onClick={() => handleDelete(app.id)}
-        aria-label={`Delete ${app.name}`}
-      >
-        <Trash2 className="w-4 h-4" />
-      </Button>
-    </div>
-  </TableCell>
-</TableRow>
-      ))}
-    </TableBody>
-  </Table>
-</div>
-
+            {filteredApps.map((app, index) => (
+              <TableRow
+                key={app.id}
+                className="hover:bg-indigo-50 even:bg-gray-50 transition-colors duration-200"
+              >
+                <TableCell className="px-4 py-3 font-medium border-r border-gray-200">
+                  {index + 1}
+                </TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.name}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.caste}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.religion}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.reservationCategory}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.distance}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.mark}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.phone}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.priorityChoices?.[1]}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.priorityChoices?.[2]}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.priorityChoices?.[3]}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.letRegNo}</TableCell>
+                <TableCell className="px-4 py-3 border-r border-gray-200">{app.letRank}</TableCell>
+                <TableCell className="px-4 py-3 text-right">
+                  <div className="flex justify-end items-center gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="hover:bg-indigo-100 transition-colors duration-200"
+                      onClick={() => onEdit(app)}
+                      aria-label={`Edit ${app.name}`}
+                    >
+                      <Pencil className="w-4 h-4 text-indigo-600" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleDelete(app.id)}
+                      aria-label={`Delete ${app.name}`}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       <ApplicationModal
         open={isModalOpen}
