@@ -42,7 +42,7 @@ export const DashboardHeader = () => {
         </p>
       </div>
       <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-        <Button 
+        {/* <Button 
           variant="outline" 
           onClick={handleUploadRealData} 
           disabled={uploading}
@@ -50,7 +50,7 @@ export const DashboardHeader = () => {
         >
           <UploadCloud className="mr-2 h-4 w-4" />
           {uploading ? "Uploading..." : "Upload Real Data"}
-        </Button>
+        </Button> */}
         <Button 
           variant="outline" 
           onClick={handleRunAllotment} 

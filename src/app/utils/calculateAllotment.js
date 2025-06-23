@@ -64,11 +64,13 @@ export const calculateAllotment = (applications, departments) => {
     const seatDistribution = {
     SM: Math.floor(nonreservedSeats* 0.5),
     EWS: Math.floor(nonreservedSeats* 0.1),
-    SC: Math.floor(nonreservedSeats* 0.08),
-    ST: Math.floor(nonreservedSeats* 0.02),
     ...specialReservation,
-  };
-  
+      };
+
+  const SCST = Math.floor(nonreservedSeats * 0.1);
+  seatDistribution["SC"] = Math.floor(SCST * 0.8);
+  seatDistribution["ST"] = SCST - seatDistribution["SC"];
+
   // SEBC: Total 30%
   const sebcTotal = Math.floor(nonreservedSeats * 0.3);
   seatDistribution["EZ"] = Math.floor(sebcTotal * 0.3);   // 9%
@@ -82,9 +84,10 @@ export const calculateAllotment = (applications, departments) => {
   seatDistribution["KU"] = Math.floor(sebcTotal * 0.0333); // 1%
   
       // Adjust any leftover seats
-      const filled = Object.values(seatDistribution).reduce((a, b) => a + b, 0);
-      if (filled < remainingSeats) seatDistribution.SM = remainingSeats - filled;
-  
+      const filledSeats = Object.values(seatDistribution).reduce((a, b) => a + b, 0);
+      const leftover = totalSeats - filledSeats;
+      if (leftover > 0) seatDistribution.SM += leftover;
+
       return {
         ...dept,
         allottedStudents: [],
@@ -199,5 +202,5 @@ export const calculateAllotment = (applications, departments) => {
         };
       }),
       updatedDepartments,
-    };
-  };
+    };
+  };

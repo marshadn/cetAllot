@@ -245,8 +245,8 @@ export const ApplicationTable = ({
                 <TableCell className="px-4 py-3 border-r border-gray-200">{app.letRegNo}</TableCell>
                 <TableCell className="px-4 py-3 border-r border-gray-200">{app.letRank}</TableCell>
                 <TableCell className="px-4 py-3 text-right">
-                  <div className="flex justify-end items-center gap-2">
-                    <Button
+                  <div className="flex justify-center items-center gap-2">
+                    {/* <Button
                       size="sm"
                       variant="outline"
                       className="hover:bg-indigo-100 transition-colors duration-200"
@@ -254,7 +254,7 @@ export const ApplicationTable = ({
                       aria-label={`Edit ${app.name}`}
                     >
                       <Pencil className="w-4 h-4 text-indigo-600" />
-                    </Button>
+                    </Button> */}
                     <Button
                       size="sm"
                       variant="destructive"
