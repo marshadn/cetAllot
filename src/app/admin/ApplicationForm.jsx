@@ -123,14 +123,21 @@ export const ApplicationForm = ({ onSuccess }) => {
   
       await addDoc(collection(db, "applications"), formattedData);
   
-      toast.success("Application submitted successfully!");
+      toast.success("Submitted!", {
+  duration: 4000,
+  description: "We’ve received your application.",
+});
+
   
       form.reset(initialFormData); // 👈 Reset the form
       setSelectedBranches({ "1": "", "2": "", "3": "" }); // 👈 Reset selected branches
       onSuccess?.(); // optional callback
     } catch (error) {
       console.error("Error submitting form:", error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Submission failed!", {
+  description: "Please try again later or contact support.",
+});
+
     }
   };
   
@@ -148,7 +155,7 @@ export const ApplicationForm = ({ onSuccess }) => {
         {[
           { name: "name", label: required("Name") },
           { name: "email", label: required("Email Address") },
-          { name: "phone", label: required("Phone Number"), type: "number" },
+          { name: "phone", label: required("Phone Number (preferably with WA)"), type: "number" },
           { name: "letRegNo", label: required("LET Registration Number"), type: "text" },
           { name: "letRank", label: required("LET Rank"), type: "number" },
           // { name: "caste", label: required("Caste") },
@@ -161,7 +168,7 @@ export const ApplicationForm = ({ onSuccess }) => {
           },
           {
             name: "distance",
-            label: required("Distance (in km)"),
+            label: required("Distance (between your workplace and CET)"),
             type: "number",
           },
         ].map(({ name, label, type = "text", step }) => (
@@ -254,7 +261,7 @@ export const ApplicationForm = ({ onSuccess }) => {
                     <SelectValue placeholder="Select your category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["EWS","SEBC","Ezhava","Muslim","Other Backward Hindu","Latin Catholic and Anglo Indian","Dheevara","Viswakarma","Kusavan","OBC Christian","Kudumbi","SC", "ST", "Physically Disabled","Transgender", "Sports", "DTE Staff","Central govt. employee", "Others"].map((opt) => (
+                    {["EWS","SEBC","Ezhava","Muslim","Other Backward Hindu","Latin Catholic and Anglo Indian","Dheevara","Viswakarma","Kusavan","OBC Christian","Kudumbi","SC", "ST", "Physically Disabled","Transgender", "Sports", "DTE Staff","Central govt. employee", "General"].map((opt) => (
                       <SelectItem key={opt} value={opt}>
                         {opt}
                       </SelectItem>

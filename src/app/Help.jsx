@@ -32,7 +32,7 @@ export default function HelpCenter() {
     },
   };
 
-  const branches = ["Civil Engineering (CE)", "Electronics & Communication (EC)", "Mechanical Engineering (ME)"];
+  const branches = ["Civil Engineering (CE)", "Electrical and Electronics Engineering(EEE)", "Mechanical Engineering (ME)"];
 
   const commonReservation = {
     "State Merit": "50%",
@@ -58,14 +58,14 @@ export default function HelpCenter() {
 
   const faqs = [
     {
-      question: "How are seats allocated in the part-time BTech program?",
+      question: "How are seats allocated in the BTech Working Professionals programme?",
       answer:
-        "Seats are allocated based on CET entrance exam rank and reservation norms of the Kerala Government.",
+        "Seats are allocated based on LET rank list published by LBS Centre for Science and Technology and reservation norms of Government of Kerala.",
     },
     {
-      question: "Is there any management quota in part-time BTech?",
+      question: "Is there any management quota in BTech Working Professionals programme?",
       answer:
-        "No, CET follows strict merit-based admission for all seats in the part-time program.",
+        "No, CET follows strict merit-based admission for all seats in the BTech Working Professionals programme.",
     },
     {
       question: "Can I apply for multiple branches?",
@@ -73,10 +73,15 @@ export default function HelpCenter() {
         "Yes, you can indicate branch preferences in your application form.",
     },
     {
-      question: "What's the duration of the part-time BTech program?",
+      question: "What's the duration of the BTech Working Professionals programme?",
       answer:
-        "The program duration is 4 years (8 semesters) with classes typically on weekends and evenings.",
+        "The BTech Working Professionals programme duration is 3 years (6 semesters).",
     },
+    {
+      question: "What's the time of conduct of classes for BTech Working Professionals programme?",
+      answer:
+        "All classes including theory and practicals will be conducted from 5.45 pm to 9.15 pm on all weekdays. On weekends extra classes may be arranged by students as per the convenience of students and teachers.",
+    }
   ];
 
   return (

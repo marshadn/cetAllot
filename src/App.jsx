@@ -10,22 +10,19 @@ import { auth } from "./firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import "leaflet/dist/leaflet.css";
 
 import Home from "./app/Home";
-// import About from "./app/About";
 import Admission from "./app/Admission";
-// import Eligibility from "./app/Eligibility";
-import NotFound from "./app/NotFound"; // Import at the 
+import NotFound from "./app/NotFound"; 
 import HelpDesk from "./app/HelpDesk";
 
 
 import Apply from "./app/Apply";
-// import Programs from "./app/Programs";
 import Login from "./app/admin/Login";
 import Dashboard from "./app/admin/Dashboard";
 import Contact from "./app/Contact";
 import Help from "./app/Help";
+import { Toaster } from "sonner"; 
 
 const ProtectedRoute = ({ children }) => {
   const [user, loading] = useAuthState(auth);
@@ -62,7 +59,8 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
-      {/* </ThemeProvider> */}
+      
+      <Toaster richColors position="top-right" />
     </>
   );
 };

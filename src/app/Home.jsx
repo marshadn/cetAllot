@@ -125,13 +125,13 @@ useEffect(() => {
               className="space-y-6"
             >
               <motion.h1
-                className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight"
+                className="text-4xl md:text-5xl font-bold tracking-tight"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                Pursue Your BTech from{" "}
-                <span className="text-primary">
+                Admission to BTech Working Professionals program{" "}<br />
+                <span className="text-primary text-3xl md:text-4xl">
                   College of Engineering Trivandrum
                 </span>
               </motion.h1>
@@ -151,25 +151,17 @@ useEffect(() => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
               >
-                <Link to="/apply">
+                {/* <Link to="/apply">
                   <Button
                     size="lg"
                     className="w-full md:w-auto hover:shadow-lg hover:scale-105 transition-all duration-300"
                   >
                     Apply Now
                   </Button>
-                </Link>
-                {/* <Link to="/programs">
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full sm:w-auto hover:shadow-lg hover:scale-105 transition-all duration-300"
-                  >
-                    Explore Programs
-                  </Button>
                 </Link> */}
+                
               </motion.div>
-            </motion.div>
+            </motion.div> 
 
             <motion.div
               className="relative h-[300px] md:h-[400px] rounded-lg overflow-hidden shadow-xl"
@@ -271,7 +263,9 @@ useEffect(() => {
                   {notice.title}
                 </h3>
 
-                <p className="text-gray-600 line-clamp-4">{notice.message}</p>
+                <p className="text-gray-600 whitespace-pre-line">
+                  {notice.message}
+                </p>
               </motion.div>
             ))
         )}
@@ -280,7 +274,68 @@ useEffect(() => {
   </div>
 </SectionWrapper>
 
-      
+{/*Fees Structure */}
+<SectionWrapper>
+  <div className="py-16 bg-background relative">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <motion.div className="text-center mb-12" variants={fadeIn}>
+        <h2 className="text-3xl font-bold mb-4">Fee Structure</h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto">
+          Below is the detailed breakdown of the fee components applicable at the time of admission and during the course.
+        </p>
+      </motion.div>
+
+      <motion.div
+        className="max-w-2xl mx-auto space-y-6 text-base leading-relaxed text-muted-foreground"
+        variants={fadeIn}
+        transition={{ delay: 0.2 }}
+      >
+        <div className="flex justify-between border-b pb-2">
+          <span className="font-medium text-foreground">Admission Fee</span>
+          <span>Rs. 1500/- <span className="text-sm text-gray-500">(to be paid at the time of admission)</span></span>
+        </div>
+
+        <div className="flex justify-between border-b pb-2">
+          <span className="font-medium text-foreground">Tuition Fee</span>
+          <span>Rs. 31,000/- <span className="text-sm text-gray-500">(per semester)</span></span>
+        </div>
+
+        <div className="flex justify-between border-b pb-2">
+          <span className="font-medium text-foreground">Special Fee</span>
+          <span>Rs. 3,150/- <span className="text-sm text-gray-500">(per year)</span></span>
+        </div>
+
+        <div className="flex justify-between border-b pb-2">
+          <span className="font-medium text-foreground">Caution Deposit</span>
+          <span>Rs. 2,500/- <span className="text-sm text-gray-500">(to be paid at the time of admission [refundable])</span></span>
+        </div>
+
+        <div className="flex justify-between border-b pb-2">
+          <span className="font-medium text-foreground">Pre-Matriculation & Registration Fee</span>
+          <span>Rs. 4,955/-</span>
+        </div>
+
+        <div className="flex justify-between border-b pb-2">
+          <span className="font-medium text-foreground">PTA Fees</span>
+          <span>Rs. 15,000/-</span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="font-medium text-foreground">Bus Fee</span>
+          <span>Rs. 2,000/-</span>
+        </div>
+
+        {/* Highlighted Note */}
+        <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
+          <strong>Note:</strong> Government and University fee payment is accepted only through <strong>QR Code, UPI, or Online payment methods</strong>. <br />
+          <span className="font-medium">Card and cash payments are not accepted.</span>
+        </div>
+      </motion.div>
+    </div>
+  </div>
+</SectionWrapper>
+
+
       {/* Programs Section */}
       <SectionWrapper>
         <div className="py-16 bg-background">
@@ -348,15 +403,7 @@ useEffect(() => {
               variants={fadeIn}
               transition={{ delay: 0.3 }}
             >
-              {/* <Link to="/programs">
-                <Button
-                  variant="outline"
-                  className="hover:scale-105 transition-transform"
-                >
-                  View All Programs{" "}
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link> */}
+              
             </motion.div>
           </div>
         </div>
@@ -384,20 +431,33 @@ useEffect(() => {
                   icon: <Calendar className="h-10 w-10 text-primary" />,
                 },
                 {
-                  title: "2. Review",
+                  title: "2. Allotment",
                   description:
-                    "Applications are reviewed by the departmental committee.",
+                    "Applications are reviewed and and allotment will be published based on the choice of candidates, LET rank list and reservations.",
                   icon: <CheckCircle className="h-10 w-10 text-primary" />,
                 },
                 {
-                  title: "3. Interview",
-                  description:
-                    "Shortlisted candidates are invited for an interview.",
-                  icon: <Users className="h-10 w-10 text-primary" />,
+                  title: "3. Document Verification",
+                  description:(
+    <>
+      Candidates will have to appear physically at CET with the originals of all documents mentioned for admission. Admission will be guaranteed only on payment of full fees on the day of admission. Fees has to be paid electronically via digipay. No cash payment is allowed.
+      <br />
+      <span className="text-sm">
+        Documents to be produced at the time of admission:{" "}
+        <Link
+          to="https://drive.google.com/file/d/1KNvGF_31V_tL_hl0X3VbDy1QnPttbAju/view?usp=sharing"
+          className="text-primary underline hover:text-primary/80"
+        >
+          Click here
+        </Link>
+      </span>
+    </>
+  ),
+  icon: <Users className="h-10 w-10 text-primary" />,
                 },
                 {
-                  title: "4. Admission",
-                  description: "Selected candidates receive admission offers.",
+                  title: "4. Commencement of classes",
+                  description: "Admitted candidates will have to attend classes commencing from July 1st.",
                   icon: <GraduationCap className="h-10 w-10 text-primary" />,
                 },
               ].map((step, index) => (
@@ -476,6 +536,15 @@ useEffect(() => {
                     className="w-full sm:w-auto border-primary text-black hover:bg-primary/10 hover:scale-105 transition-transform"
                   >
                     Contact Us
+                  </Button>
+                </Link>
+                <Link to="https://drive.google.com/file/d/1N9gARnxlDe95UEgKyLyoqndtDi17Qcy1/view?usp=sharing">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full sm:w-auto border-primary text-black hover:bg-primary/10 hover:scale-105 transition-transform"
+                  >
+                    Press Release
                   </Button>
                 </Link>
               </motion.div>

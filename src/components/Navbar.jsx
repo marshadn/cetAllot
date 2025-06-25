@@ -135,7 +135,7 @@ export default function Navbar() {
       Edu<span className="text-primary">Allot</span>
     </span>
     <span className="text-xs text-muted-foreground tracking-wide">
-      B.Tech Admission Portal
+      B.Tech WP Admission Portal
     </span>
   </div>
 </Link>
@@ -175,9 +175,9 @@ export default function Navbar() {
 
           {/* Desktop buttons */}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
-            <Link to="/apply">
+            {/* <Link to="/apply">
               <Button>Apply Now</Button>
-            </Link>
+            </Link> */}
             {user ? (
               <Button variant="outline" onClick={handleLogout}>
                 Logout
