@@ -317,7 +317,7 @@ useEffect(() => {
 
         <div className="flex justify-between border-b pb-2">
           <span className="font-medium text-foreground">PTA Fees</span>
-          <span>Rs. 15,000/-</span>
+          <span>Rs. 10,000/-</span>
         </div>
 
         <div className="flex justify-between">
@@ -446,6 +446,16 @@ useEffect(() => {
         Documents to be produced at the time of admission:{" "}
         <Link
           to="https://drive.google.com/file/d/1KNvGF_31V_tL_hl0X3VbDy1QnPttbAju/view?usp=sharing"
+          className="text-primary underline hover:text-primary/80"
+        >
+          Click here
+        </Link>
+      </span>
+      <br />
+      <span className="text-sm">
+        Instructions to candidate:{" "}
+        <Link
+          to="https://drive.google.com/file/d/1WLgFCCfhTuiGxBcKL0uLFjzzd1K3CrUz/view?usp=sharing"
           className="text-primary underline hover:text-primary/80"
         >
           Click here
