@@ -162,7 +162,7 @@ export const ApplicationForm = ({ onSuccess }) => {
           // { name: "religion", label: required("Religion") },
           {
             name: "mark",
-            label: required("Marks (%)"),
+            label: required("Marks % ( Obtained in diploma/Bsc/BVoc exam )"),
             type: "number",
             step: "0.01",
           },
