@@ -168,7 +168,7 @@ export const ApplicationForm = ({ onSuccess }) => {
           },
           {
             name: "distance",
-            label: required("Distance (between your workplace and CET)"),
+            label: required("Distance in KM (between your workplace and CET)"),
             type: "number",
           },
         ].map(({ name, label, type = "text", step }) => (

@@ -351,23 +351,24 @@ useEffect(() => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  title: "Electrical and Electronics Engineering",
-                  description:
-                    "Focuses on communication systems, signal processing, embedded systems, and VLSI design.",
-                  icon: <BookOpen className="h-10 w-10 text-primary" />,
-                },
-                {
-                  title: "Civil Engineering",
-                  description:
-                    "Covers power generation, electrical machines, control systems, and renewable energy.",
-                  icon: <GraduationCap className="h-10 w-10 text-primary" />,
-                },
-                {
-                  title: "Mechanical Engineering",
-                  description:
-                    "Explores thermodynamics, manufacturing processes, CAD/CAM, and automotive systems.",
-                  icon: <Users className="h-10 w-10 text-primary" />,
-                },
+  title: "Electrical and Electronics Engineering",
+  description:
+    "Covers power generation, electrical machines, control systems, electronics, and renewable energy technologies.",
+  icon: <BookOpen className="h-10 w-10 text-primary" />,
+},
+{
+  title: "Civil Engineering",
+  description:
+    "Focuses on structural engineering, transportation systems, geotechnical engineering, water resources, and construction management.",
+  icon: <GraduationCap className="h-10 w-10 text-primary" />,
+},
+{
+  title: "Mechanical Engineering",
+  description:
+    "Explores thermodynamics, fluid mechanics, manufacturing processes, machine design, CAD/CAM, and automotive systems.",
+  icon: <Users className="h-10 w-10 text-primary" />,
+},
+
               ].map((program, index) => (
                 <AnimatedCard key={index} delay={index * 0.1}>
                   <Card className="h-full transition-all hover:shadow-lg hover:border-primary/30 group">

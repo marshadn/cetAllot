@@ -3,7 +3,7 @@ import {
   collection,
   onSnapshot,
   deleteDoc,
-  doc,
+  doc,query, orderBy
 } from "firebase/firestore";
 import { db } from "@/firebase";
 import { Input } from "@/components/ui/Input";
@@ -50,16 +50,19 @@ export const ApplicationTable = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "applications"), (snapshot) => {
-      const apps = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setApplications(apps);
-    });
+  const q = query(collection(db, "applications"), orderBy("submittedAt", "asc"));
 
-    return () => unsubscribe();
-  }, []);
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const apps = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setApplications(apps);
+  });
+
+  return () => unsubscribe();
+}, []);
+
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this application?")) return;
@@ -123,6 +126,7 @@ export const ApplicationTable = ({
       "Priority 3": app.priorityChoices?.[3],
       "LET Reg No": app.letRegNo,
       "LET Rank": app.letRank,
+      experience: app.experience,
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
@@ -246,15 +250,7 @@ export const ApplicationTable = ({
                 <TableCell className="px-4 py-3 border-r border-gray-200">{app.letRank}</TableCell>
                 <TableCell className="px-4 py-3 text-right">
                   <div className="flex justify-center items-center gap-2">
-                    {/* <Button
-                      size="sm"
-                      variant="outline"
-                      className="hover:bg-indigo-100 transition-colors duration-200"
-                      onClick={() => onEdit(app)}
-                      aria-label={`Edit ${app.name}`}
-                    >
-                      <Pencil className="w-4 h-4 text-indigo-600" />
-                    </Button> */}
+                    
                     <Button
                       size="sm"
                       variant="destructive"

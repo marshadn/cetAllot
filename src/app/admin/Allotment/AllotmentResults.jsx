@@ -3,8 +3,9 @@ import { db } from "@/firebase";
 import { collection, getDocs, doc, getDoc, setDoc } from "firebase/firestore";
 import AllottedTable from "./AllottedTable";
 import * as XLSX from "xlsx";
-import { Download } from "lucide-react";
+import { Download, Phone } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { distance } from "framer-motion";
 
 export const AllotmentResults = () => {
   const [allottedData, setAllottedData] = useState({ ce: [], ee: [], mech: [] });
@@ -84,6 +85,24 @@ export const AllotmentResults = () => {
         Name: student.name,
         LET_Rank: student.letRank,
     Reservation_Category: index < 15 ? "Merit" : student.reservationCategory,
+    address:student.address,
+    aadhar: student.adharNumber,
+    age: student.age,
+    caste: student.caste,
+    category: student.category,
+    company: student.company,
+    distance: student.distance,
+    email: student.email,
+    experience: student.experience,
+    Education: student.highestEducation,
+    let_Reg: student.letRegNo,
+    mark: student.mark,
+    Phone: student.phone,
+    Priority_1: student.priorityChoices[1],
+    Priority_2: student.priorityChoices[2],
+    Priority_3: student.priorityChoices[3],
+    religion: student.religion,
+
         Department: deptLabel
     }));
     const worksheet = XLSX.utils.json_to_sheet(sheetData);
