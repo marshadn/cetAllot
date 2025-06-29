@@ -1,7 +1,7 @@
 export const calculateAllotment = (applications, departments) => {
   const MAX_DISTANCE = 70;
   const MIN_MARK = 45;
-  const MIN_EXPERIENCE = 1;
+  // const MIN_EXPERIENCE = 1;
 
   const getCategoryKey = (app) => {
     const map = {
@@ -42,10 +42,10 @@ export const calculateAllotment = (applications, departments) => {
   const eligibleApplications = applications
     .filter((app) => {
       const validMark = parseFloat(app.mark) >= MIN_MARK;
-      const validExperience = parseFloat(app.experience) >= MIN_EXPERIENCE;
+      // const validExperience = parseFloat(app.experience) >= MIN_EXPERIENCE;
       const validDistance = parseFloat(app.distance) <= MAX_DISTANCE;
       const validRank = isValidRank(app.letRank);
-      return validDistance && validRank && validMark && validExperience;
+      return validDistance && validRank && validMark;
     })
     .sort((a, b) => parseFloat(a.letRank) - parseFloat(b.letRank));
 
