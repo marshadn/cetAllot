@@ -531,7 +531,7 @@ useEffect(() => {
                 variants={fadeIn}
                 transition={{ delay: 0.2 }}
               >
-                {/* <Link to="/apply">
+                <Link to="/apply">
                   <Button
                     size="lg"
                     variant="secondary"
@@ -539,7 +539,7 @@ useEffect(() => {
                   >
                     Apply Now
                   </Button>
-                </Link> */}
+                </Link>
                 <Link to="/contact">
                   <Button
                     size="lg"

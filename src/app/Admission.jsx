@@ -144,7 +144,7 @@ export default function PartTimeBtech() {
   <div className="text-center py-12">
     <h3 className="text-2xl font-semibold mb-4">Allotment - Not Yet Published</h3>
     <p className="text-muted-foreground text-lg">
-      Allotment will be published on 29th June 2025 at 1 PM here.
+      {/* Allotment will be published on 29th June 2025 at 1 PM here. */}
     </p>
   </div>
 )}

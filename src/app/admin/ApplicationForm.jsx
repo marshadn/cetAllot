@@ -50,7 +50,7 @@ const FormSchema = z.object({
   company: z.string().optional(),
   experience: z.string().optional(),
   address: z.string().optional(),
-  highestEducation: z.string().optional(),
+  highestEducation: z.string().min(1, "Highest Education is required"),
   distance: z.string().min(1, "Distance is required"),
 });
 
@@ -73,6 +73,32 @@ const initialFormData = {
   highestEducation: "",
   distance: "",
 };
+
+const getFirstErrorMessage = (errors) => {
+  for (const key in errors) {
+    if (!errors[key]) continue;
+
+    if (typeof errors[key]?.message === "string") {
+      return errors[key].message;
+    }
+
+    // Handle nested errors like priorityChoices
+    if (typeof errors[key] === "object") {
+      const nestedMessage = getFirstErrorMessage(errors[key]);
+      if (nestedMessage) return nestedMessage;
+    }
+  }
+  return null;
+};
+
+const onError = (errors) => {
+  const message = getFirstErrorMessage(errors) || "Please correct the errors and try again.";
+  toast.error("Submission Failed", {
+    description: message,
+  });
+};
+
+
 
 export const ApplicationForm = ({ onSuccess }) => {
   const form = useForm({
@@ -150,7 +176,7 @@ export const ApplicationForm = ({ onSuccess }) => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit,onError)} className="space-y-4">
         {/* Required Inputs */}
         {[
           { name: "name", label: required("Name") },
@@ -158,8 +184,7 @@ export const ApplicationForm = ({ onSuccess }) => {
           { name: "phone", label: required("Phone Number (preferably with WA)"), type: "number" },
           { name: "letRegNo", label: required("LET Registration Number"), type: "text" },
           { name: "letRank", label: required("LET Rank"), type: "number" },
-          // { name: "caste", label: required("Caste") },
-          // { name: "religion", label: required("Religion") },
+          { name: "highestEducation", label: required("Highest Education") },
           {
             name: "mark",
             label: required("Marks % ( Obtained in diploma/Bsc/BVoc exam )"),
@@ -183,7 +208,7 @@ export const ApplicationForm = ({ onSuccess }) => {
                     {...field}
                     type={type}
                     step={step}
-                    placeholder={name}
+                    // placeholder={name}
                     className={fieldState.invalid ? "border-red-500" : ""}
                   />
                 </FormControl>
@@ -322,7 +347,6 @@ export const ApplicationForm = ({ onSuccess }) => {
           { name: "company", label: "Company" },
           { name: "experience", label: "Experience (in years)", type: "number" },
           { name: "address", label: "Address" },
-          { name: "highestEducation", label: "Highest Education" },
         ].map(({ name, label, type = "text", step }) => (
           <FormField
             key={name}
@@ -331,7 +355,7 @@ export const ApplicationForm = ({ onSuccess }) => {
               <FormItem>
                 <FormLabel>{label}</FormLabel>
                 <FormControl>
-                  <Input {...field} type={type} step={step} placeholder={label} />
+                  <Input {...field} type={type} step={step}  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
