@@ -182,8 +182,8 @@ export const ApplicationForm = ({ onSuccess }) => {
           { name: "name", label: required("Name") },
           { name: "email", label: required("Email Address") },
           { name: "phone", label: required("Phone Number (preferably with WA)"), type: "number" },
-          { name: "letRegNo", label: required("LET Registration Number"), type: "text" },
-          { name: "letRank", label: required("LET Rank"), type: "number" },
+          { name: "letRegNo", label: required("LET Registration Number (enter 0 if not written)"), type: "text" },
+          { name: "letRank", label: required("LET Rank (enter 0 if not written)"), type: "number" },
           { name: "highestEducation", label: required("Highest Education") },
           {
             name: "mark",
@@ -286,7 +286,7 @@ export const ApplicationForm = ({ onSuccess }) => {
                     <SelectValue placeholder="Select your category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {["EWS","SEBC","Ezhava","Muslim","Other Backward Hindu","Latin Catholic and Anglo Indian","Dheevara","Viswakarma","Kusavan","OBC Christian","Kudumbi","SC", "ST", "Physically Disabled","Transgender", "Sports", "DTE Staff","Central govt. employee", "General"].map((opt) => (
+                    {["EWS","Ezhava","Muslim","Other Backward Hindu","Latin Catholic and Anglo Indian","Dheevara","Viswakarma","Kusavan","OBC Christian","Kudumbi","SC", "ST", "Physically Disabled","Transgender", "Sports", "DTE Staff","Central govt. employee", "General"].map((opt) => (
                       <SelectItem key={opt} value={opt}>
                         {opt}
                       </SelectItem>

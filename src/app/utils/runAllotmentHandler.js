@@ -9,28 +9,41 @@ const clearPreviousAllotment = async (department) => {
     deleteDoc(doc(db, `allotment/${department}/students`, docSnap.id))
   );
   await Promise.all(deletions);
-  console.log(`🗑️ Cleared previous data in allotment/${department}/students`);
+  // console.log(`🗑️ Cleared previous data in allotment/${department}/students`);
 };
 
 export const runAllotmentHandler = async () => {
   try {
-    console.log("📥 Fetching applications from Firestore...");
+    // console.log("📥 Fetching applications from Firestore...");
     const applicationsSnapshot = await getDocs(collection(db, "applications"));
     const applications = applicationsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-    console.log("✅ Total applications fetched:", applications.length);
-    console.log("📘 Sample Application:", applications[0]);
+    // console.log("✅ Total applications fetched:", applications.length);
+    // console.log("📘 Sample Application:", applications[0]);
 
-    console.log("⚙️ Running calculateAllotment...");
+    // console.log("⚙️ Running calculateAllotment...");
     const departments = [
-      { name: "ce", totalSeats: 30 },
-      { name: "ee", totalSeats: 30 },
-      { name: "mech", totalSeats: 30 },
-    ];
+  {
+    "name": "Electrical and Electronics Engineering",
+    "totalSeats": 30
+  },
+  {
+    "name": "Mechanical Engineering",
+    "totalSeats": 30
+  },
+  {
+    "name": "Civil Engineering",
+    "totalSeats":30
+},
+  {
+    "name": "Waiting List",
+    "totalSeats":100
+}
+]
     const { updatedApplications, updatedDepartments } = calculateAllotment(applications, departments);
-    console.log("🧮 Allotment completed. Departments:", updatedDepartments);
+    // console.log("🧮 Allotment completed. Departments:", updatedDepartments);
 
     // 🔄 Clear old data before inserting new ones
     for (const dept of updatedDepartments) {
@@ -42,21 +55,21 @@ export const runAllotmentHandler = async () => {
       const studentsInDept = updatedApplications.filter(
         (app) => app.allottedDepartment === dept.name
       );
-      console.log(`📤 Uploading ${studentsInDept.length} students to dept: ${dept.name}`);
+      // console.log(`📤 Uploading ${studentsInDept.length} students to dept: ${dept.name}`);
 
       for (const student of studentsInDept) {
         await setDoc(
           doc(db, "allotment", dept.name, "students", student.id),
           student
         );
-        console.log(`✅ Written to allotment/${dept.name}/students/${student.id}`);
+        // console.log(`✅ Written to allotment/${dept.name}/students/${student.id}`);
       }
     }
 
-    console.log("✅ Allotment data written successfully.");
+    // console.log("✅ Allotment data written successfully.");
     return { success: true };
   } catch (error) {
-    console.error("❌ Allotment error:", error);
+    // console.error("❌ Allotment error:", error);
     return { success: false, error };
   }
 };

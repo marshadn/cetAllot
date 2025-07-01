@@ -52,7 +52,7 @@ const AllottedTable = ({ students, deptName }) => {
                   {student.letRank || "-"}
                 </td>
                 <td className="px-3 py-3 whitespace-nowrap">
-                  {index < 15 ? "Merit" : student.reservationCategory}
+                  {student.allottedCategory}
                 </td>
               </tr>
             ))}

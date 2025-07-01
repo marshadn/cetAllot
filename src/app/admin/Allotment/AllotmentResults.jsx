@@ -15,15 +15,18 @@ export const AllotmentResults = () => {
   useEffect(() => {
     const fetchAllottedStudents = async () => {
       try {
-        const departments = ["ce", "ee", "mech"];
+        const departments = ["Civil Engineering", "Electrical and Electronics Engineering", "Mechanical Engineering","Waiting List"];
         const data = { ce: [], ee: [], mech: [] };
 
         for (const dept of departments) {
           const snapshot = await getDocs(collection(db, `allotment/${dept}/students`));
+          // console.log(snapshot);
+          
           const students = [];
 
           snapshot.forEach((doc) => {
             const student = { id: doc.id, ...doc.data() };
+           
             students.push(student);
           });
 
@@ -37,10 +40,11 @@ export const AllotmentResults = () => {
 
           data[dept] = students;
         }
+console.log("Allotted Data:", data);
 
         setAllottedData(data);
       } catch (error) {
-        console.error("Error fetching allotted students:", error);
+        // console.error("Error fetching allotted students:", error);
       } finally {
         setLoading(false);
       }
@@ -54,7 +58,7 @@ export const AllotmentResults = () => {
           setIsPublished(!!docSnap.data().published);
         }
       } catch (error) {
-        console.error("Error fetching publish status:", error);
+        // console.error("Error fetching publish status:", error);
       }
     };
 
@@ -72,7 +76,7 @@ export const AllotmentResults = () => {
       setIsPublished(newStatus);
       alert(`Allotment ${newStatus ? "published" : "unpublished"} successfully.`);
     } catch (error) {
-      console.error("Error updating publish status:", error);
+      // console.error("Error updating publish status:", error);
       alert("Failed to update publish status.");
     }
   };
@@ -84,7 +88,7 @@ export const AllotmentResults = () => {
     const sheetData = students.map((student,index) => ({
         Name: student.name,
         LET_Rank: student.letRank,
-    Reservation_Category: index < 15 ? "Merit" : student.reservationCategory,
+    Reservation_Category: student.allottedCategory,
     address:student.address,
     aadhar: student.adharNumber,
     age: student.age,
@@ -110,9 +114,10 @@ export const AllotmentResults = () => {
 
   };
 
-  appendWithDept(allottedData.ce, "Civil Engineering");
-  appendWithDept(allottedData.ee, "Electrical Engineering");
-  appendWithDept(allottedData.mech, "Mechanical Engineering");
+  appendWithDept(allottedData['Civil Engineering'], "Civil Engineering");
+  appendWithDept(allottedData['Electrical and Electronics Engineering'], "Electrical Engineering");
+  appendWithDept(allottedData['Mechanical Engineering'], "Mechanical Engineering");
+  appendWithDept(allottedData['Waiting List'], "Waiting List");
   XLSX.writeFile(workbook, "Allotment_Results.xlsx");
 
 };
@@ -127,9 +132,9 @@ export const AllotmentResults = () => {
   }
 
   if (
-    allottedData.ce.length === 0 &&
-    allottedData.ee.length === 0 &&
-    allottedData.mech.length === 0
+    allottedData['Civil Engineering'].length === 0 &&
+    allottedData['Electrical and Electronics Engineering'].length === 0 &&
+    allottedData['Mechanical Engineering'].length === 0
   ) {
     return (
       <div className="text-center text-muted-foreground text-sm py-10">
@@ -160,9 +165,10 @@ export const AllotmentResults = () => {
         </Button>
       </div>
 
-      <AllottedTable students={allottedData.ce} deptName="Civil Engineering" />
-      <AllottedTable students={allottedData.ee} deptName="Electrical & Electronics Engineering" />
-      <AllottedTable students={allottedData.mech} deptName="Mechanical Engineering" />
-    </div>
-  );
+      <AllottedTable students={allottedData['Civil Engineering']} deptName="Civil Engineering" />
+      <AllottedTable students={allottedData['Electrical and Electronics Engineering']} deptName="Electrical & Electronics Engineering" />
+      <AllottedTable students={allottedData['Mechanical Engineering']} deptName="Mechanical Engineering" />
+      <AllottedTable students={allottedData['Waiting List']} deptName="Waiting List" />
+  </div>
+);
 };
