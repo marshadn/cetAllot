@@ -184,13 +184,13 @@ export const ApplicationForm = ({ onSuccess }) => {
           { name: "phone", label: required("Phone Number (preferably with WA)"), type: "number" },
           { name: "letRegNo", label: required("LET Registration Number (enter 0 if not written)"), type: "text" },
           { name: "letRank", label: required("LET Rank (enter 0 if not written)"), type: "number" },
-          { name: "highestEducation", label: required("Highest Education") },
-          {
-            name: "mark",
-            label: required("Marks % ( Obtained in diploma/Bsc/BVoc exam )"),
-            type: "number",
-            step: "0.01",
-          },
+          // { name: "highestEducation", label: required("Highest Education") },
+          // {
+          //   name: "mark",
+          //   label: required("Marks % ( Obtained in diploma/Bsc/BVoc exam )"),
+          //   type: "number",
+          //   step: "0.01",
+          // },
           {
             name: "distance",
             label: required("Distance in KM (between your workplace and CET)"),
@@ -219,6 +219,50 @@ export const ApplicationForm = ({ onSuccess }) => {
         ))}
 
 {/* Caste Dropdown */}
+<FormField
+  name="highestEducation"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>{required("Education Type")}</FormLabel>
+      <FormControl>
+        <Select value={field.value} onValueChange={field.onChange}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select your highest education type" />
+          </SelectTrigger>
+          <SelectContent>
+            {["BTech","BE","Diploma", "BSc", "DVoc"].map((type) => (
+              <SelectItem key={type} value={type}>
+                {type}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+
+<FormField
+            key={"mark"}
+            name={"mark"}
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>{required("Highest Education Marks % ( Obtained in BTech/BE/Diploma/Bsc/DVoc exam )")}</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type={"number"}
+                    step={"0.01"}
+                    // placeholder={name}
+                    className={fieldState.invalid ? "border-red-500" : ""}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
 <FormField
   name="caste"
   render={({ field }) => (

@@ -12,6 +12,15 @@ const clearPreviousAllotment = async (department) => {
   // console.log(`🗑️ Cleared previous data in allotment/${department}/students`);
 };
 
+const clearPreviousAllotment2 = async (department) => {
+  const snapshot = await getDocs(collection(db, `no_exam_allotment/${department}/students`));
+  const deletions = snapshot.docs.map((docSnap) =>
+    deleteDoc(doc(db, `no_exam_allotment/${department}/students`, docSnap.id))
+  );
+  await Promise.all(deletions);
+  // console.log(`🗑️ Cleared previous data in allotment/${department}/students`);
+};
+
 export const runAllotmentHandler = async () => {
   try {
     // console.log("📥 Fetching applications from Firestore...");
@@ -42,12 +51,15 @@ export const runAllotmentHandler = async () => {
     "totalSeats":100
 }
 ]
-    const { updatedApplications, updatedDepartments } = calculateAllotment(applications, departments);
+    const { updatedApplications, updatedDepartments,noExamApplications } = calculateAllotment(applications, departments);
+    const noApplication = calculateAllotment(noExamApplications, departments)["updatedApplications"];
+    
     // console.log("🧮 Allotment completed. Departments:", updatedDepartments);
 
     // 🔄 Clear old data before inserting new ones
     for (const dept of updatedDepartments) {
       await clearPreviousAllotment(dept.name);
+      await clearPreviousAllotment2(dept.name);
     }
 
     // ✅ Write new allotment results
@@ -60,6 +72,21 @@ export const runAllotmentHandler = async () => {
       for (const student of studentsInDept) {
         await setDoc(
           doc(db, "allotment", dept.name, "students", student.id),
+          student
+        );
+        // console.log(`✅ Written to allotment/${dept.name}/students/${student.id}`);
+      }
+    }
+
+    for (const dept of updatedDepartments) {
+      const studentsInDept = noApplication.filter(
+        (app) => app.allottedDepartment === dept.name
+      );
+      // console.log(`📤 Uploading ${studentsInDept.length} students to dept: ${dept.name}`);
+
+      for (const student of studentsInDept) {
+        await setDoc(
+          doc(db, "no_exam_allotment", dept.name, "students", student.id),
           student
         );
         // console.log(`✅ Written to allotment/${dept.name}/students/${student.id}`);

@@ -3,21 +3,30 @@ import React from "react";
 const AllottedTable = ({ students, deptName }) => {
   if (!students || students.length === 0) return null;
 
-  // ✅ Sort students: Experienced first, then less experienced
-  const sortedStudents = [...students].sort((a, b) => {
-    const expA = parseFloat(a.experience ?? 0);
-    const expB = parseFloat(b.experience ?? 0);
+  // Define education priority order
+  const educationOrder = {
+    'BE': 1,
+    'BTech': 1,
+    'Diploma': 2,
+    'BSc': 3,
+    'BVoc': 4
+  };
 
+  // ✅ Sort students: First by education priority, then by rank
+  const sortedStudents = [...students].sort((a, b) => {
+    // Get education priorities (default to 999 for unknown education types)
+    const eduPriorityA = educationOrder[a.education] || 999;
+    const eduPriorityB = educationOrder[b.education] || 999;
+
+    // First sort by education priority
+    if (eduPriorityA !== eduPriorityB) {
+      return eduPriorityA - eduPriorityB;
+    }
+
+    // If education is the same, sort by rank
     const rankA = parseFloat(a.letRank ?? Infinity);
     const rankB = parseFloat(b.letRank ?? Infinity);
 
-    const validA = expA >= 1;
-    const validB = expB >= 1;
-
-    if (validA && !validB) return -1;
-    if (!validA && validB) return 1;
-
-    // Both valid or both not valid — sort by rank
     return rankA - rankB;
   });
 
@@ -32,6 +41,7 @@ const AllottedTable = ({ students, deptName }) => {
             <tr>
               <th className="px-3 py-3 rounded-tl-2xl border-r border-white/30">No.</th>
               <th className="px-3 py-3 border-r border-white/30">Name</th>
+              <th className="px-3 py-3 border-r border-white/30">Education</th>
               <th className="px-3 py-3 border-r border-white/30">Rank</th>
               <th className="px-3 py-3 rounded-tr-2xl">Category</th>
             </tr>
@@ -49,6 +59,9 @@ const AllottedTable = ({ students, deptName }) => {
                   {student.name}
                 </td>
                 <td className="px-3 py-3 border-r border-gray-200/50 whitespace-nowrap">
+                  {student.education || "-"}
+                </td>
+                <td className="px-3 py-3 border-r border-gray-200/50 whitespace-nowrap">
                   {student.letRank || "-"}
                 </td>
                 <td className="px-3 py-3 whitespace-nowrap">
@@ -63,4 +76,4 @@ const AllottedTable = ({ students, deptName }) => {
   );
 };
 
-export default AllottedTable;
+export default AllottedTable;
